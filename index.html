@@ -1,148 +1,53 @@
 <!DOCTYPE html>
-<head>
-  <title>Tom Arrell, Software Engineer</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#555" />
-  <meta property="og:title" content="Tom Arrell" />
-  <meta property="og:site_name" content="Tom Arrell" />
-  <meta property="og:url" content="https://tomarrell.com" />
-  <meta property="og:description" content="Tom is a Senior Software Engineer, specializing in distributed and concurrent systems." />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content="https://tomarrell.com/images/portrait_small_compress.jpg" />
+<html>
+  <head>
+    <title>Tom Arrell, Software Engineer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#555" />
+    <meta property="og:title" content="Tom Arrell" />
+    <meta property="og:site_name" content="Tom Arrell" />
+    <meta property="og:url" content="https://tomarrell.com" />
+    <meta property="og:description" content="Tom is a Senior Software Engineer, specializing in distributed and concurrent systems." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://tomarrell.com/images/portrait_small_compress.jpg" />
 
-  <link rel="icon" href="favicon.ico" />
-  <link type="text/css" rel="stylesheet" href="./style.css" />
-</head>
+    <link rel="icon" href="favicon.ico" />
+    <link type="text/css" rel="stylesheet" href="./style.css" />
+  </head>
 
-<body>
-  <div class="wrapper">
-    <div class="portrait">
-      <img src="https://tomarrell.com/images/portrait_small_compress.jpg" />
+  <body>
+    <div class="wrapper">
+      <div class="portrait">
+        <img src="https://tomarrell.com/images/portrait_small_compress.jpg" />
+      </div>
+
+      <div class="info">
+        <h1>Tom Arrell</h1>
+        <p>Tom is a Senior Software Engineer, currently living in the colorful Berlin, Germany. He enjoys exploring various programming language design elements including <a href="https://godoc.org/runtime">application-level concurrency primites</a>, <a href="https://doc.rust-lang.org/stable/rust-by-example/scope/raii.html">memory management models</a> and <a href="https://doc.rust-lang.org/stable/rust-by-example/scope/lifetime.html">safety constructs</a>. He also does some embedded programming from time to time.</p>
+        <p>He currently has an unhealthy obsession with the <a href="https://rust-lang.org">Rust programming language</a>. But his day-to-day work is done in <a href="https://golang.org/">Golang</a></p>
+        <p>He holds a BSc in Computer Science from <a href="https://www.auckland.ac.nz/">The University of Auckland</a>, but also studied physics during his time there. He'll happily talk for too long about quantum mechanics.</p>
+
+        <hr />
+
+        <p>I am currently working as a Senior Software Engineer at <a href="https://klarna.com/">Klarna</a>.</p>
+        <p>Go and have a read of my <a target="_blank" href="https://blog.tomarrell.com">blog</a>.</p>
+        <p class="links">
+          <a target="_blank" href="https://github.com/tomarrell">github</a>
+          <a target="_blank" href="https://www.facebook.com/tom.arrell">fb</a>
+          <a target="_blank" href="https://www.instagram.com/tomarrell">insta</a>
+          <a target="_blank" href="https://www.instagram.com/tomarrell">twitter</a>
+          <a target="_blank" href="https://www.linkedin.com/in/tomarrell">linkedin</a>
+          <a target="_blank" href="mailto:tom.arrell@gmail.com">email</a>
+          <a target="_blank" href="/gpg.asc">gpg</a>
+        </p>
+      </div>
     </div>
 
-    <div class="info">
-      <h1>Tom Arrell</h1>
-      <p>Tom is a Senior Software Engineer, currently living in the colorful Berlin, Germany. He enjoys exploring various programming language design elements including <a href="https://godoc.org/runtime">application-level concurrency primites</a>, <a href="https://doc.rust-lang.org/stable/rust-by-example/scope/raii.html">memory management models</a> and <a href="https://doc.rust-lang.org/stable/rust-by-example/scope/lifetime.html">safety constructs</a>. He also does some embedded programming from time to time.</p>
-
-      <p>He currently has an unhealthy obsession with the <a href="https://rust-lang.org">Rust programming language</a>. But his day-to-day work is done in <a href="https://golang.org/">Golang</a></p>
-
-      <p>He holds a BSc in Computer Science from <a target="_blank" href="https://www.auckland.ac.nz/">The University of Auckland</a>, but also studied physics during his time there. He'll happily talk for too long about quantum mechanics.</p>
-
-      <hr />
-
-      <p>I am currently working as a Senior Software Engineer at <a href="https://klarna.com/">Klarna</a>.</p>
-
-      <p>Go and have a read of my <a href="https://blog.tomarrell.com">blog</a>.</p>
-
-      <p class="links">
-        <a target="_blank" href="https://github.com/tomarrell">github</a>
-        <a target="_blank" href="https://www.facebook.com/tom.arrell">fb</a>
-        <a target="_blank" href="https://www.instagram.com/tomarrell">insta</a>
-        <a target="_blank" href="https://www.linkedin.com/in/tomarrell">linkedin</a>
-        <a target="_blank" href="mailto:tom.arrell@gmail.com">email</a>
-        <a target="_blank" href="/gpg.asc">gpg</a>
-      </p>
+    <div class="snake">
+      <canvas id="snakeCanvas"></canvas>
+      <div id="score">0</div>
     </div>
-  </div>
+  </body>
+</html>
 
-  <div class="snake">
-    <canvas id="snakeCanvas"></canvas>
-    <div id="score">0</div>
-  </div>
-</body>
-
-<script>
-  // Settings
-  const width = window.innerWidth;
-  const height = window.innerHeight;
-  const gridWidth = width / 20;
-  const gridHeight = height / 20;
-  const tickRate = 100;
-
-  // Colors
-  const snakeColor = "white";
-  const canvasColor = "#111";
-
-  // Setup + redering
-  const c = document.getElementById("snakeCanvas");
-  const ctx = c.getContext("2d");
-  c.width = width;
-  c.height = height;
-
-  const clear = () => {
-    ctx.fillStyle = canvasColor;
-    ctx.fillRect(0, 0, c.width, c.height);
-  }
-
-  const renderSnake = (xScale, yScale, snake) => {
-    for (part of snake.parts) {
-      ctx.fillStyle = snakeColor;
-      ctx.fillRect(part.x * xScale, part.y * yScale, xScale, yScale);
-    }
-  }
-
-  const renderFruit = (xScale, yScale, fruits) => {
-    for (fruit of fruits) {
-      switch (fruit.value) {
-        case 1:
-          ctx.fillStyle = "pink";
-          break;
-        case 2:
-          ctx.fillStyle = "orange";
-          break;
-        case 5:
-          ctx.fillStyle = "green";
-          break;
-      }
-      ctx.fillRect(fruit.x * xScale, fruit.y * yScale, xScale, yScale);
-    }
-  }
-
-  const renderScore = (score) => {
-    document.getElementById("score").innerHTML = score;
-  }
-
-  const renderState = (state) => {
-    const xScale = Math.floor(width / state.width);
-    const yScale = Math.floor(height / state.height);
-
-    clear()
-    renderSnake(xScale, yScale, state.snake);
-    renderFruit(xScale, yScale, state.fruit);
-    renderScore(state.score)
-  }
-
-  //-----------
-  // Websocket
-  //-----------
-  const host = window.location.hostname + ":3000";
-  const ws = new WebSocket("ws://" + host + "/ws");
-
-  document.body.addEventListener("keydown", (e) => {
-    switch (e.keyCode) {
-      case 38:
-        ws.send(JSON.stringify({ type: "input", direction: "up" }));
-        break;
-      case 37:
-        ws.send(JSON.stringify({ type: "input", direction: "left" }));
-        break;
-      case 40:
-        ws.send(JSON.stringify({ type: "input", direction: "down" }));
-        break;
-      case 39:
-        ws.send(JSON.stringify({ type: "input", direction: "right" }));
-        break;
-    }
-  })
-
-  ws.onmessage = (e) => {
-    const payload = JSON.parse(e.data);
-    if (payload.type === "state") {
-      renderState(payload.data)
-    }
-  }
-
-  ws.onopen = () => {
-    ws.send(JSON.stringify({ type: "new", width: gridWidth, height: gridHeight, tick: tickRate }));
-  }
-</script>
+<script src="./main.js"></script>
