@@ -40,6 +40,8 @@ const generateFruit = () => {
 	}
 }
 
+var score = 0;
+
 const snake = {
   velX: 1,
   velY: 0,
@@ -71,12 +73,12 @@ const snake = {
 		newHead.y += snake.velY
 
 		if (newHead.x < 0) {
-			newHead.x = gridWidth - 1
+			newHead.x = gridWidth
 		} else if (newHead.x > gridWidth) {
 			newHead.x = 0
 		} else if (newHead.y < 0) {
-			newHead.y = gridHeight - 1
-		} else if (newHead.y >= gridHeight) {
+			newHead.y = gridHeight
+		} else if (newHead.y > gridHeight) {
 			newHead.y = 0
 		}
 
@@ -110,6 +112,18 @@ const fruit = {
 	}
 }
 
+const checkCollision = () => {
+	for (const [i, f] of fruit.fruits.entries()) {
+		const head = snake.parts[0];
+		if (head.x === f.x && head.y === f.y) {
+			const last = snake.parts[snake.parts.length-1];
+			snake.parts.push(...Array(f.value).fill(last));
+			score += f.value;
+			fruit.fruits[i] = generateFruit();
+		}
+	}
+}
+
 const clear = () => {
   ctx.fillStyle = canvasColor;
   ctx.fillRect(0, 0, c.width, c.height);
@@ -117,7 +131,8 @@ const clear = () => {
 
 const render = () => {
   clear()
-	snake.update()
+	snake.update();
+	checkCollision();
   snake.render(xScale, yScale);
   fruit.render(xScale, yScale);
 }
