@@ -38,9 +38,9 @@ hr {
   opacity: 0.2;
 }
 
-.snake {
+#snakeCanvas {
   position: absolute; 
-  visibility: hidden;
+	z-index: -1;
 }
 
 .wrapper {
@@ -54,8 +54,10 @@ hr {
 
 .portrait {
   height: 100%;
-  flex: 2;
+  flex: 2.4;
   overflow: hidden;
+	opacity: 0.9;
+	filter: contrast(110%) brightness(80%);
 }
 
 .portrait img {
