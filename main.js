@@ -150,3 +150,9 @@ window.addEventListener("keydown", e => {
     snake.down();
   }
 });
+
+// Swipe functionality
+window.addEventListener('swipeleft', () => snake.left());
+window.addEventListener('swiperight', () => snake.right());
+window.addEventListener('swipeup', () => snake.up());
+window.addEventListener('swipedown', () => snake.down());
