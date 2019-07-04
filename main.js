@@ -5,6 +5,43 @@ window.tocca({
   swipeThreshold: 40,
 })
 
+// Setup a new signed snake game by calling snake
+// engine API. Documentation available at:
+// https://github.com/tomarrell/snake/tree/master/validator
+const fetchNewGame = (width, height, snake) => {
+  const data = {
+    width,
+    height,
+    snake: {
+      boundX: width,
+      boundY: height,
+      velX: snake.velX,
+      velY: snake.velY,
+      parts: snake.parts,
+    }
+  };
+
+  return fetch("http://dev.tomarrell.com:8082/new", {
+    method: 'POST',
+    body: JSON.stringify(data),
+  }).then(res => res.json());
+}
+
+// Send a validation request with the collected ticks
+// since last validation.
+const validateTicks = (lastValidState, ticks) => {
+  const data = {
+    ...lastValidState,
+    ticks,
+  };
+
+  return fetch("http://dev.tomarrell.com:8082/validate", {
+    method: 'POST',
+    body: JSON.stringify(data),
+  }).then(res => res.json());
+}
+
+// Setup and main loop
 const main = () => {
   const width = window.innerWidth;
   const height = window.innerHeight;
@@ -13,6 +50,9 @@ const main = () => {
   const gridWidth = Math.floor(width / xScale);
   const gridHeight = Math.floor(height / yScale);
   const tickRate = 10;
+
+  var lastValidState = {};
+  const ticks = [];
 
   // Colors
   const snakeColor = "white";
@@ -36,6 +76,12 @@ const main = () => {
       document.querySelector(".arrowKeys").style.opacity = 0;
       document.querySelector(".scoreWrap").style.opacity = 1;
       playing = true;
+      fetchNewGame(gridWidth, gridHeight, snake)
+        .then(game => {
+          lastValidState = game;
+          fruit.fruits = game.fruit;
+          console.log(game);
+        });
     }
     fn(...params);
   }
@@ -43,25 +89,6 @@ const main = () => {
   // Generate a number up to, but not including, max
   const randInt = max => {
     return Math.floor(Math.random() * (max - 0)) + 0;
-  };
-
-  const generateFruit = () => {
-    const fruitValSeed = randInt(10);
-    var f = 0;
-
-    if (fruitValSeed < 5) {
-      f = 1;
-    } else if (fruitValSeed < 8) {
-      f = 2;
-    } else {
-      f = 5;
-    }
-
-    return {
-      x: randInt(gridWidth),
-      y: randInt(gridHeight),
-      value: f
-    };
   };
 
   const snake = {
@@ -101,6 +128,10 @@ const main = () => {
       const newHead = { ...snake.parts[0] };
       snake.locked = false;
 
+      if (playing) {
+        ticks.push({ velX: snake.velX, velY: snake.velY });
+      }
+
       newHead.x += snake.velX;
       newHead.y += snake.velY;
 
@@ -125,7 +156,7 @@ const main = () => {
   };
 
   const fruit = {
-    fruits: [generateFruit(), generateFruit()],
+    fruits: [],
     render: (xScale, yScale) => {
       for (f of fruit.fruits) {
         switch (f.value) {
@@ -147,20 +178,32 @@ const main = () => {
   const checkCollision = () => {
     for (const [i, f] of fruit.fruits.entries()) {
       const head = snake.parts[0];
+      const tail = snake.parts[snake.parts.length - 1];
+
       if (head.x === f.x && head.y === f.y) {
-        const last = snake.parts[snake.parts.length - 1];
-        snake.parts.push(...Array(f.value).fill(last));
         score += f.value;
-        fruit.fruits[i] = generateFruit();
+        snake.parts.push(...Array(f.value).fill(tail));
+
+        validateTicks(lastValidState, ticks)
+          .then(res => {
+            lastValidState = { ...res };
+            fruit.fruits = res.fruit;
+          });
+
+        fruit.fruits[i] = {};
+        // Start tick collection from scratch
+        ticks.length = 0;
       }
     }
   };
 
+  // Clear canvas
   const clear = () => {
     ctx.fillStyle = canvasColor;
     ctx.fillRect(0, 0, c.width, c.height);
   };
 
+  // Main render func
   const render = () => {
     clear();
 
