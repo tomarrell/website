@@ -7,6 +7,11 @@ const gridWidth = Math.floor(width / xScale);
 const gridHeight = Math.floor(height / yScale);
 const tickRate = 10;
 
+// Tocca setup
+window.tocca({
+  swipeThreshold: 40,
+})
+
 // Colors
 const snakeColor = "white";
 const canvasColor = "#111";
@@ -17,6 +22,7 @@ const ctx = c.getContext("2d");
 c.width = width;
 c.height = height;
 
+// Generate a number up to, but not including, max
 const randInt = max => {
   return Math.floor(Math.random() * (max - 0)) + 0;
 };
@@ -69,12 +75,12 @@ const snake = {
     newHead.y += snake.velY;
 
     if (newHead.x < 0) {
-      newHead.x = gridWidth;
-    } else if (newHead.x > gridWidth) {
+      newHead.x = gridWidth - 1;
+    } else if (newHead.x >= gridWidth) {
       newHead.x = 0;
     } else if (newHead.y < 0) {
-      newHead.y = gridHeight;
-    } else if (newHead.y > gridHeight) {
+      newHead.y = gridHeight - 1;
+    } else if (newHead.y >= gridHeight) {
       newHead.y = 0;
     }
 
