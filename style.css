@@ -51,6 +51,7 @@ hr {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 100;
 }
 
 .portrait {
@@ -75,6 +76,34 @@ hr {
 
 .links a {
   margin-right: 0.5rem;
+}
+
+.arrowKeys {
+  position: absolute;
+  bottom: 1rem;
+  text-align: center;
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+
+.arrowKeys p {
+  margin: auto;
+}
+
+.arrowKeys img {
+  width: 5rem;
+}
+
+.scoreWrap {
+  position: absolute;
+  opacity: 0;
+  transition: opacity 0.3s;
+  bottom: 1rem;
+  left: 1rem;
+}
+
+.scoreWrap p {
+  margin: 0;
 }
 
 @media screen and (max-width: 1150px) {

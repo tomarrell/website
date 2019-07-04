@@ -19,8 +19,18 @@ const canvasColor = "#111";
 // Setup + redering
 const c = document.getElementById("snakeCanvas");
 const ctx = c.getContext("2d");
+var playing = false;
 c.width = width;
 c.height = height;
+
+const startPlay = (fn) => (...params) => {
+  if (!playing) {
+    document.querySelector(".arrowKeys").style.opacity = 0;
+    document.querySelector(".scoreWrap").style.opacity = 1;
+    playing = true;
+  }
+  fn(...params);
+}
 
 // Generate a number up to, but not including, max
 const randInt = max => {
@@ -47,6 +57,10 @@ const generateFruit = () => {
 };
 
 var score = 0;
+
+const renderScore = () => {
+  document.querySelector(".score").innerHTML = score;
+}
 
 const snake = {
   velX: 1,
@@ -139,13 +153,17 @@ const render = () => {
 
   snake.render(xScale, yScale);
   fruit.render(xScale, yScale);
+
+  if (playing) {
+    renderScore();
+  }
 };
 
 currentInterval = setInterval(() => {
   render();
 }, 100);
 
-window.addEventListener("keydown", e => {
+window.addEventListener("keydown", startPlay(e => {
   if (e.keyCode == 37) {
     snake.left();
   } else if (e.keyCode == 38) {
@@ -155,10 +173,10 @@ window.addEventListener("keydown", e => {
   } else if (e.keyCode == 40) {
     snake.down();
   }
-});
+}));
 
 // Swipe functionality
-window.addEventListener('swipeleft', () => snake.left());
-window.addEventListener('swiperight', () => snake.right());
-window.addEventListener('swipeup', () => snake.up());
-window.addEventListener('swipedown', () => snake.down());
+window.addEventListener('swipeleft',  startPlay(() => snake.left()));
+window.addEventListener('swiperight', startPlay(() => snake.right()));
+window.addEventListener('swipeup',    startPlay(() => snake.up()));
+window.addEventListener('swipedown',  startPlay(() => snake.down()));
