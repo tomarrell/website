@@ -21,7 +21,7 @@ const fetchNewGame = (width, height, snake) => {
     }
   };
 
-  return fetch("http://dev.tomarrell.com:8082/new", {
+  return fetch("http://localhost:8081/new", {
     method: 'POST',
     body: JSON.stringify(data),
   }).then(res => res.json());
@@ -35,10 +35,16 @@ const validateTicks = (lastValidState, ticks) => {
     ticks,
   };
 
-  return fetch("http://dev.tomarrell.com:8082/validate", {
+  return fetch("http://localhost:8081/validate", {
     method: 'POST',
     body: JSON.stringify(data),
-  }).then(res => res.json());
+  }).then(res => {
+    if (res.status != 200) {
+      return res.text()
+        .then(text => ({ err: text }));
+    }
+    return res.json();
+  });
 }
 
 // Setup and main loop
@@ -65,6 +71,9 @@ const main = () => {
   c.width = width;
   c.height = height;
 
+  // Initial DOM State
+  document.querySelectorAll(".gameOver").forEach(e => e.style.opacity = 0);
+
   var score = 0;
   const renderScore = () => {
     document.querySelector(".score").innerHTML = score;
@@ -80,10 +89,14 @@ const main = () => {
         .then(game => {
           lastValidState = game;
           fruit.fruits = game.fruit;
-          console.log(game);
         });
     }
     fn(...params);
+  }
+
+  const stopGame = () => {
+    clearInterval(interval);
+    document.querySelectorAll(".gameOver").forEach(e => e.style.opacity = 1);
   }
 
   // Generate a number up to, but not including, max
@@ -161,7 +174,7 @@ const main = () => {
       for (f of fruit.fruits) {
         switch (f.value) {
           case 1:
-            ctx.fillStyle = "pink";
+            ctx.fillStyle = "purple";
             break;
           case 2:
             ctx.fillStyle = "orange";
@@ -175,7 +188,18 @@ const main = () => {
     }
   };
 
-  const checkCollision = () => {
+  const handleValidation = () => {
+    validateTicks(lastValidState, ticks)
+      .then(res => {
+        if (res.err) {
+          throw new Error(res.err);
+        }
+        lastValidState = { ...res };
+        fruit.fruits = res.fruit;
+      });
+  }
+
+  const checkFruitCollision = () => {
     for (const [i, f] of fruit.fruits.entries()) {
       const head = snake.parts[0];
       const tail = snake.parts[snake.parts.length - 1];
@@ -184,18 +208,22 @@ const main = () => {
         score += f.value;
         snake.parts.push(...Array(f.value).fill(tail));
 
-        validateTicks(lastValidState, ticks)
-          .then(res => {
-            lastValidState = { ...res };
-            fruit.fruits = res.fruit;
-          });
+        handleValidation();
 
-        fruit.fruits[i] = {};
-        // Start tick collection from scratch
-        ticks.length = 0;
+        ticks.length = 0; // Start tick collection from scratch
+        fruit.fruits[i] = {}; // remove collided fruit
       }
     }
   };
+
+  const checkSelfCollision = () => {
+    head = snake.parts[0]
+    for (part of snake.parts.slice(1)) {
+      if (head.x == part.x && head.y == part.y) {
+        stopGame();
+      }
+    }
+  }
 
   // Clear canvas
   const clear = () => {
@@ -208,7 +236,8 @@ const main = () => {
     clear();
 
     snake.update();
-    checkCollision();
+    checkFruitCollision();
+    checkSelfCollision();
 
     snake.render(xScale, yScale);
     fruit.render(xScale, yScale);
@@ -243,8 +272,15 @@ const main = () => {
 
 interval = main();
 
+const newGame = () => {
+  clearInterval(interval);
+  interval = main();
+}
+
 window.onresize = () => {
   clearInterval(interval);
   interval = main();
 }
+
+document.querySelectorAll(".restart").forEach(e => e.addEventListener("click", newGame));
 
