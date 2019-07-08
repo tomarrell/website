@@ -65,6 +65,7 @@ hr {
 .portrait img {
   height: 100%;
   transform: translate(-15%, 0);
+  color: transparent;
 }
 
 .info {
@@ -120,7 +121,7 @@ hr {
 
 @media screen and (max-width: 950px) {
   html {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
   }
 }
 
@@ -156,6 +157,10 @@ hr {
 }
 
 @media screen and (max-width: 450px) {
+  body {
+    padding: 1rem;
+  }
+
   .wrapper {
     width: 100%;
     max-width: none;
@@ -168,6 +173,10 @@ hr {
   .portrait img {
     transform: translate(0, -15%);
     height: 27rem;
+  }
+
+  .info {
+    padding: 1rem 1rem;
   }
 }
 
