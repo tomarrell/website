@@ -23,7 +23,7 @@ const fetchNewGame = (width, height, snake) => {
     }
   };
 
-  return fetch(snakeHost, {
+  return fetch(snakeHost + "/new", {
     method: 'POST',
     body: JSON.stringify(data),
   }).then(res => res.json());
@@ -37,7 +37,7 @@ const validateTicks = (lastValidState, ticks) => {
     ticks,
   };
 
-  return fetch(snakeHost, {
+  return fetch(snakeHost + "/validate", {
     method: 'POST',
     body: JSON.stringify(data),
   }).then(res => {
