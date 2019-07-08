@@ -7,7 +7,7 @@ The goal of the site is to maintain an incredibly low footprint, and allow for e
 The index is designed to not be cached. Weighing ~3.9KB. The total size of the code assets are around 14KB non-gzipped.
 
 ## Snake
-The snake game is implemented using my [parallel snake engine](https://github.com/tomarrell/snake) and the built in web adapter.
+The snake game is implemented using my [parallel snake engine](https://github.com/tomarrell/snake) and the built in validation adapter.
 
 ## Analytics
 I use self-hosted [Fathom](https://usefathom.com/) analytics across my personal site and blog.
