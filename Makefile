@@ -12,7 +12,7 @@ cleanS3:
 	aws s3 rm s3://tomarrell.com --recursive
 	@echo "-> S3 clean..."
 
-upload: cleanS3 build
+upload: build cleanS3
 	@echo "-> Copying built files to S3..."
 	aws s3 cp ./dist s3://tomarrell.com --recursive --acl public-read
 	aws s3 cp ./dist/index.html s3://tomarrell.com \
