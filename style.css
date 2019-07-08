@@ -78,6 +78,7 @@ hr {
 
 .links {
   line-height: 2rem;
+  margin-bottom: 0;
 }
 
 .links a {
@@ -157,10 +158,6 @@ hr {
 }
 
 @media screen and (max-width: 450px) {
-  body {
-    padding: 1rem;
-  }
-
   .wrapper {
     width: 100%;
     max-width: none;
