@@ -283,4 +283,3 @@ window.onresize = () => {
 }
 
 document.querySelectorAll(".restart").forEach(e => e.addEventListener("click", newGame));
-

@@ -1,5 +1,5 @@
 # Tom's Personal Site
-Welcome to Tom's personal homepage.
+Welcome to Tom's personal site.
 
 ## Goals
 The goal of the site is to maintain an incredibly low footprint, and allow for easy edge node caching in order to keep load times as low as possible.
