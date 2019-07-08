@@ -1,5 +1,7 @@
 var interval;
 
+const snakeHost = "https://dev.tomarrell.com/snake";
+
 // Tocca setup
 window.tocca({
   swipeThreshold: 40,
@@ -21,7 +23,7 @@ const fetchNewGame = (width, height, snake) => {
     }
   };
 
-  return fetch("http://localhost:8081/new", {
+  return fetch(snakeHost, {
     method: 'POST',
     body: JSON.stringify(data),
   }).then(res => res.json());
@@ -35,7 +37,7 @@ const validateTicks = (lastValidState, ticks) => {
     ticks,
   };
 
-  return fetch("http://localhost:8081/validate", {
+  return fetch(snakeHost, {
     method: 'POST',
     body: JSON.stringify(data),
   }).then(res => {
