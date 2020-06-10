@@ -42,6 +42,22 @@
     fathom('trackPageview');
   </script>
 
+  <!-- Okapi Analytics -->
+  <script>
+   (function (o, k, a, p, i) {
+     o[p] = o[p] || function ()
+     { (o[p].queue = o[p].queue || []).push(arguments); }; var e = k.createElement(i);
+     var firstScript = k.getElementsByTagName(i)[0]; e.async = 1; e.src = a;
+     firstScript.parentNode.insertBefore(e, firstScript);
+   })(window, document,
+     '//okapianalytics.com/zeug.js',
+     'okapi', 'script');
+   okapi('set', 'tokenId', '2f1d5bd5-24fb-4df6-bae3-1fd7285af192');
+   okapi('set', 'trackerApiUrl', '//okapianalytics.com/api/collect' );
+   okapi('trackPageView');
+  </script>
+  <!-- End Okapi Analytics -->
+
   <body>
     <div class="wrapper">
       <div class="portrait">
