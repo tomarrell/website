@@ -1,5 +1,5 @@
 {
   "devDependencies": {
-    "cssnano": "^4.1.10"
+    "cssnano": "^5.0.6"
   }
 }
