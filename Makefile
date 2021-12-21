@@ -18,7 +18,7 @@ upload: build cleanS3 ## Build and upload the files to the S3 bucket
 	@echo "-> Copying built files to S3..."
 	aws s3 cp ./dist s3://tomarrell.com --recursive --acl public-read
 	aws s3 cp ./dist/index.html s3://tomarrell.com \
-		--cache-control no-store \
+		--cache-control public,max-age=86400 \
 		--acl public-read
 
 ## Help display.
