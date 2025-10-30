@@ -1,5 +1,6 @@
 {
   "devDependencies": {
-    "cssnano": "^5.0.6"
+    "cssnano": "^5.0.6",
+    "parcel": "^2.16.0"
   }
 }
